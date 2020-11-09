@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day4</title>
+    <style>
+        .red{
+            color: red;
+        }
+        .black{
+            color: black;
+        }
+        .body {
+            background-color: #abc;
+        }
+        .students {
+            width: 100%;
+            max-width: 45rem;
+            padding: 1em;
+            margin: 1em auto;
+            overflow: auto;
+            background-color: #fff;
+            box-shadow: 0px 0.25rem 1rem rgba(0,0,0,0.25);
+        }
+        .search{
+            width: max-content;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0px 0.25rem 1rem rgba(0,0,0,0.25);
+            vertical-align: middle;
+            margin-bottom: 0.5em;
+        }
+        .table{
+            border: 1px solid #abc;
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 45rem;
+            margin: 1em auto;
+            overflow: auto;
+            background-color: #fff;
+            box-shadow: 0px 0.25rem 1rem rgba(0,0,0,0.25);
+        }
+        th, td {
+            max-width: 30%;
+            border: 1px solid #abc;
+        }
+    </style>
+</head>
+<body class = "body">
+    <div id="app">
+        <div class = "search" style = "margin-left: 19.5em;">
+            <input type="text" v-model = "search">
+        <button v-on:click = "searchStudent()">Search</button>
+        </div>
+        <table class="table">
+            <tr v-for="item in students"  v-bind:key="item.id"> 
+                <td>{{ item.name }}</td><td><input type="checkbox" v-model="item.isDonePr"></td><td>{{item.group}}</td><td>{{ item.mark}}</td>
+                <td><a href = "#" @click="deleteStudent(item.name)">Delete</a></td>
+            </tr>
+        </table>
+        
+        <div class = "search">
+            <input type="text" v-model = "stud.name">
+            <select v-model="stud.group">
+                <option disabled value="RPZ 17 1/9">Please select group</option>
+                <option value="RPZ 17 1/9">RPZ 17 1/9</option>
+                <option value="RPZ 17 2/9">RPZ 17 2/9</option>
+            </select>
+            <input type="number" v-model = "stud.mark">
+            <input type = "checkbox" v-model = "stud.isDonePr">isDonePr
+            <button v-on:click="add()">Add</button>
+        </div>
+    </div>
+    <div id="converter">
+        <h2>Currency converter</h2>
+        <span>Enter currency</span><input type="number" v-model = "currency"> <br>
+        <span>Enter from</span>
+        <select  v-model = "ValOld">
+            <option v-for="item in arr" :value="item.buy">{{ item.ccy }}</option>
+        </select>
+        <span>Enter to</span>
+        <select v-model = "ValNew">
+            <option v-for="item in arr" :value="item.buy">{{ item.ccy }}</option>
+        </select>
+        <button v-on:click="calculate()">Convert</button>
+        <h3 v-if="converted">{{ Result }}</h3>
+    </div>
+
+      <script src="main.js" defer></script>
+</body>
+</html>
