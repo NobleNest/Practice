@@ -6,33 +6,30 @@
         </div>
         <table class="table">
             <tr v-for="item in students"  v-bind:key="item._id"> 
-                <td v-if = "item.name == search">
-                    <input type="text" v-model = "stud.name">
-                </td>
-                <td v-if = "item.name != search">{{ item.name }}</td>
+                <template v-if = "item._id == searchid">
+                    <td><input type="text" v-model = "stud.name"></td>
+                    <td><input type = "checkbox" v-model = "stud.isDonePr"></td>
+                    <td>
+                        <select v-model="stud.group">
+                            <option disabled value="RPZ 17 1/9">Please select group</option>
+                            <option value="RPZ 17 1/9">RPZ 17 1/9</option>
+                            <option value="RPZ 17 2/9">RPZ 17 2/9</option>
+                        </select>
+                    </td>
+                    <td><input type="number" v-model = "stud.mark"></td>
+                    <td> <a href = "#" @click="changeStudent(item._id)"><img src = "mod.png" width = "20" height = "20"></a></td>
+                </template>
 
-                <td v-if = "item.name != search"><input type="checkbox" v-model="item.isDonePr"></td>
-                <td v-if = "item.name == search">
-                    <input type = "checkbox" v-model = "stud.isDonePr">
-                </td>
-                <td v-if = "item.name == search">
-                    <select v-model="stud.group">
-                        <option disabled value="RPZ 17 1/9">Please select group</option>
-                        <option value="RPZ 17 1/9">RPZ 17 1/9</option>
-                        <option value="RPZ 17 2/9">RPZ 17 2/9</option>
-                    </select>
-                </td>
-                <td v-if = "item.name == search">
-                    <input type="number" v-model = "stud.mark">
-                </td>
-                <td v-if = "item.name != search">{{item.group}}</td>
-                
-                <td v-if = "item.name != search">{{ item.mark}}</td>
-                <td v-if = "item.name == search">
-                    <a href = "#" @click="changeStudent(item._id)"><img src = "mod.png" width = "20" height = "20"></a>
-                </td>
-                <td v-else><a href = "#" @click="deleteStudent(item._id)">Delete</a></td>
-                <td v-if = "item.name != search"><a href = "#" @click="changeValue(item.name)"><img src = "mod.png" width = "20" height = "20"></a></td>
+
+                <template v-else>
+                    <td>{{ item.name }}</td>
+                    <td><input type="checkbox" v-model="item.isDonePr"></td>
+                    <td>{{item.group}}</td>
+                    <td>{{ item.mark}}</td>
+                    <td><a href = "#" @click="changeValue(item._id)"><img src = "mod.png" width = "20" height = "20"></a></td>
+                </template>
+
+                <td><a href = "#" @click="deleteStudent(item._id)">Delete</a></td>
             </tr> 
         </table>
         
@@ -52,15 +49,14 @@
 
 <script>
     import Vue from 'vue'
-    import axios from 'axios'
-    import VueAxios from 'vue-axios'
  
     export default {
        data: function() {
            return {
                 search:"",
+                searchid:"",
                 students: [],
-                stud: {name:"", group:"", mark:"", isDonePr:""},
+                stud: {name:"", group:"", mark:"", isDonePr: false},
            };
         },
         mounted: function(){      
@@ -92,13 +88,13 @@
                     this.students = response.data;
                 })
             },
-            changeValue: function(name){
+            changeValue: function(id){
                 this.stud = this.students.find(elem => {
-                    if(elem.name == name){
+                    if(elem._id == id){
                         return elem
                     }
                 });
-                this.search = name
+                this.searchid = id
             },
             changeStudent: function(id){
                 Vue.axios.put("http://46.101.212.195:3000/students/" + id,{
@@ -110,6 +106,7 @@
                 .then((response) => {
                     console.log(response.data)
                     this.reload();
+                    this.searchid = ""
                 })
             }
         }
