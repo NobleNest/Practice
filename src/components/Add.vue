@@ -11,7 +11,7 @@
             <option v-for="item in arr" :value="item.buy"  v-bind:key="item.ccy">{{ item.ccy }}</option>
         </select>
         <button v-on:click="calculate()">Convert</button>
-        <h3 v-if="converted">{{ Result }}</h3>
+        <h3 v-if="converted">{{ Result | round }}</h3>
     </div>
 </template>
 
@@ -41,7 +41,13 @@ export default {
     },
     methods: {
         calculate: function(){
-            this.Result = "Your new currency = " + this.ValOld / this.ValNew * this.currency
+            this.Result = this.ValOld / this.ValNew * this.currency
+            console.log(this.Result)
+        }
+    },
+    filters : {
+        round : function(value) {
+            return "Your new currency = " + (Math.round( value * 100 + Number.EPSILON ) / 100)
         }
     }
 }
