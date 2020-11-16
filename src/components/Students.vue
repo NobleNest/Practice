@@ -66,22 +66,15 @@
                 students: [],
                 stud: {name:"", group:"", mark:"", isDonePr: false},
                 style:"components/style.css",
-                local:false
            };
         },
         mounted: async function(){   
-            if(localStorage.style){
-                    this.local = localStorage.style
-                }
-                else{
-                    localStorage.style = this.local
-                }
-                if(this.local == 'false'){
-                    this.style = "components/style.css"
-                }
-                else{
-                    this.style = "components/add.css"
-                }   
+            if(this.$store.getters.getStyle){
+                this.style = "components/style.css"
+            }
+            else{
+                this.style = "components/add.css"
+            }   
             let response = await Vue.axios.get("http://46.101.212.195:3000/students");
             this.students = response.data;
             this.$store.commit('setCount', this.students.length)
@@ -139,15 +132,15 @@
                 })
             },
             changeStyle:function(){
-                    this.local = !this.local
-                    localStorage.style = this.local
-                    if(this.local == false){
-                        this.style = "components/style.css"
-                    }
-                    else{
-                        this.style = "components/add.css"
-                    }
+                this.$store.commit('setStyle', !this.$store.getters.getStyle)
+                localStorage.style = this.$store.getters.getStyle
+                if(this.$store.getters.getStyle == false){
+                    this.style = "components/add.css"
                 }
+                else{
+                    this.style = "components/style.css"
+                }
+            }
         }
     }
 </script>
