@@ -8,6 +8,8 @@ import Students from './components/Students.vue'
 import StudentInfo from './components/StudentInfo.vue'
 
 import Add from './components/Add.vue'
+
+import store from './store.js'
  
 const routes = [
    { path: '/', component: Students },
@@ -24,7 +26,8 @@ Vue.use(VueRouter)
 new Vue({
    render: h => h(App),
    el: '#app',
-   router
+   router,
+   store
 })
 
 new Vue({

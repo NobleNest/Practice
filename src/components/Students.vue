@@ -3,6 +3,9 @@
         <div class = "search" style = "margin-left: 19.5em;">
             <input type="text" v-model = "search">
             <button v-on:click = "searchStudent()">Search</button>
+            <div>Number of students: {{ studentsCount }}</div>
+            <link :href = "style" rel="stylesheet">
+            <button v-on:click = "changeStyle()">Change style</button>
         </div>
         <table class="table">
             <tr v-for="item in students"  v-bind:key="item._id"> 
@@ -62,10 +65,31 @@
                 searchid:"",
                 students: [],
                 stud: {name:"", group:"", mark:"", isDonePr: false},
+                style:"components/style.css",
+                local:false
            };
         },
-        mounted: function(){      
-            this.reload();
+        mounted: async function(){   
+            if(localStorage.style){
+                    this.local = localStorage.style
+                }
+                else{
+                    localStorage.style = this.local
+                }
+                if(this.local == 'false'){
+                    this.style = "components/style.css"
+                }
+                else{
+                    this.style = "components/add.css"
+                }   
+            let response = await Vue.axios.get("http://46.101.212.195:3000/students");
+            this.students = response.data;
+            this.$store.commit('setCount', this.students.length)
+        },
+        computed: {
+            studentsCount () {
+                return this.$store.getters.getCount
+            }
         },
         methods: {
             deleteStudent: function(id){
@@ -113,7 +137,21 @@
                     this.reload();
                     this.searchid = ""
                 })
-            }
+            },
+            changeStyle:function(){
+                    this.local = !this.local
+                    localStorage.style = this.local
+                    if(this.local == false){
+                        this.style = "components/style.css"
+                    }
+                    else{
+                        this.style = "components/add.css"
+                    }
+                }
         }
     }
 </script>
+
+<style scoped>
+    @import './style.css';
+</style>
