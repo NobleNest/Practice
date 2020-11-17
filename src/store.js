@@ -7,11 +7,13 @@ const store = new Vuex.Store({
    plugins:[createPersistedState({ storage: window.localStorage })],
    state: {
      count: 0,
-     style: window.localStorage.style
+     style: window.localStorage.style,
+     user: null
    },
    mutations: {
        setCount: (state, count) => state.count = count,
        setStyle: (state, style) => state.style = style,
+       setUser: (state, user) => state.user = user,
    },
    getters: {
        getCount: (state) =>
@@ -21,6 +23,10 @@ const store = new Vuex.Store({
        getStyle: (state) =>
        {
          return state.style
+       },
+       getUser: (state) =>
+       {
+         return state.user
        }
    }
  })

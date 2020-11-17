@@ -34,7 +34,7 @@
                     <td><a href = "#" @click="changeValue(item._id)"><img src = "mod.png" width = "20" height = "20"></a></td>
                 </template>
 
-                <td><a href = "#" @click="deleteStudent(item._id)">Delete</a></td>
+                <td><a href = "#" v-on:click.prevent = "deleteStudent(item._id)" v-show = "item.group == getCurrentUser.group">Delete</a></td>
             </tr> 
         </table>
         
@@ -82,6 +82,9 @@
         computed: {
             studentsCount () {
                 return this.$store.getters.getCount
+            },
+            getCurrentUser () {
+                return this.$store.getters.getUser
             }
         },
         methods: {
